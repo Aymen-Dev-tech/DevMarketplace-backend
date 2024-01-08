@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int     @id @default(autoincrement())
+  phoneNumber    String  @unique
+  email          String  @unique
+  profilePicture String  @unique
+  Seller         Seller?
+  Buyer          Buyer?
+}
+
+model Seller {
+  id          Int          @id @default(autoincrement())
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int          @unique
+  MarketPlace Marketplace?
+}
+
+model Buyer {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+}
+
+model Marketplace {
+  id       Int    @id @default(autoincrement())
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId Int    @unique
+}
+
+model Product {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String
+  pric           Float
+  isSold         Boolean
+  DamoURL        String?
+  type           ProdutType       @relation(fields: [typeId], references: [id])
+  typeId         Int
+  ProductPicture ProductPicture[]
+}
+
+model ProdutType {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Product Product[]
+}
+
+model ProductPicture {
+  id        Int     @id @default(autoincrement())
+  url       String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+}
+
+model Tech {
+  id        Int        @id @default(autoincrement())
+  name      String
+  stack     stack?
+  Framework Framework?
+  Language  Language?
+}
+
+model stack {
+  id     Int  @id @default(autoincrement())
+  tech   Tech @relation(fields: [techId], references: [id], onDelete: Cascade)
+  techId Int  @unique
+}
+
+model Framework {
+  id     Int  @id @default(autoincrement())
+  tech   Tech @relation(fields: [techId], references: [id], onDelete: Cascade)
+  techId Int  @unique
+}
+
+model Language {
+  id     Int  @id @default(autoincrement())
+  tech   Tech @relation(fields: [techId], references: [id], onDelete: Cascade)
+  techId Int  @unique
+}
