@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class AuthService {
   generateJwt(payload) {
     return this.jwtService.sign(payload);
   }
-  async signIn(user) {
+  async validateUser(user): Promise<User> {
     console.log('user email: ', user.email);
 
     const result = await this.userService.findOne(user.email);
@@ -19,17 +20,9 @@ export class AuthService {
     if (!result) {
       return this.registerUser(user);
     }
-
-    return this.generateJwt({
-      sub: result.id,
-    });
+    return result;
   }
-
-  async registerUser(user) {
-    const newUser = await this.userService.create(user);
-    return this.generateJwt({
-      sub: newUser.id,
-      email: newUser.email,
-    });
+  async registerUser(user): Promise<User> {
+    return await this.userService.create(user);
   }
 }
