@@ -26,8 +26,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException();
-    } else if (user.status === 'incompleted') {
-      throw new UnauthorizedException('incompleted account');
     } else {
       return user;
     }

@@ -19,7 +19,7 @@ import { BuyersModule } from 'src/buyers/buyers.module';
     BuyersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [

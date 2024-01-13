@@ -17,7 +17,15 @@ export class UsersService {
       where: {
         email,
       },
-      select: {
+    });
+  }
+
+  async findOneById(id: number): Promise<any> {
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
         Seller: {
           select: {
             id: true,

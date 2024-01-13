@@ -22,7 +22,7 @@ export class AuthService {
     if (result) {
       //account exist and user tries to signup
       if (info && Object.values(info).length > 0) return 'redirect to login';
-      //account exist and user tries to login
+      //account exist and user tried to login
       return result;
     } else {
       if (info && Object.values(info).length > 0) {

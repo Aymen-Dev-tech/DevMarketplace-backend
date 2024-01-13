@@ -48,7 +48,7 @@ export class AuthController {
       secure: false,
       sameSite: 'none',
       httpOnly: false,
-      maxAge: 5 * 60 * 60,
+      maxAge: 60 * 60 * 1000,
     });
     return res.redirect('http://localhost:5173');
   }

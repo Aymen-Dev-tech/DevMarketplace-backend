@@ -13,12 +13,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Get('profile')
-  profile(@Req() req) {
+  async profile(@Req() req) {
     const { userId } = req.user;
-    return this.userService.findOne(userId);
+    return await this.userService.findOneById(userId);
   }
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.update(id, updateUserDto);
   }
 }
