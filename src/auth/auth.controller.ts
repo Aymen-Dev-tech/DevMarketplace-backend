@@ -50,6 +50,13 @@ export class AuthController {
       httpOnly: false,
       maxAge: 60 * 60 * 1000,
     });
-    return res.redirect('http://localhost:5173');
+    return res.redirect('http://localhost:5173/marketplace');
+  }
+
+  @Get('logout')
+  logout(@Res() res: Response) {
+    console.log('logout called');
+    res.clearCookie('access_token');
+    return res.end();
   }
 }
