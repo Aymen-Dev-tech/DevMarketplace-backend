@@ -29,7 +29,7 @@ export class AuthController {
     const user = req.user;
     //check if the req.user has been set by the passport
     if (!user) throw new UnauthorizedException('unauthenticated');
-    const info = req.session.info;
+    const info = req.session?.info;
     const result = await this.authService.validateUser(user, info);
     //clear the session for the next request
     req.session.destroy();

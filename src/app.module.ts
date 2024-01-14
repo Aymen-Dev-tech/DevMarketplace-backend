@@ -9,7 +9,14 @@ import { SellersModule } from './sellers/sellers.module';
 import { BuyersModule } from './buyers/buyers.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UsersModule, SellersModule, BuyersModule],
+  imports: [
+    ConfigModule.forRoot(),
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    SellersModule,
+    BuyersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

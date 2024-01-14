@@ -13,7 +13,7 @@ datasource db {
 model User {
   id             Int     @id @default(autoincrement())
   name           String
-  phoneNumber    String  @unique 
+  phoneNumber    String  @unique
   email          String  @unique
   profilePicture String  @unique
   Seller         Seller?
@@ -21,22 +21,17 @@ model User {
 }
 
 model Seller {
-  id          Int          @id @default(autoincrement())
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int          @unique
-  MarketPlace Marketplace?
+  id       Int       @id @default(autoincrement())
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int       @unique
+  exp      String
+  products Product[]
 }
 
 model Buyer {
   id     Int  @id @default(autoincrement())
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int  @unique
-}
-
-model Marketplace {
-  id       Int    @id @default(autoincrement())
-  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  sellerId Int    @unique
 }
 
 model Product {
@@ -49,6 +44,8 @@ model Product {
   type           ProdutType       @relation(fields: [typeId], references: [id])
   typeId         Int
   ProductPicture ProductPicture[]
+  Seller         Seller           @relation(fields: [sellerId], references: [id])
+  sellerId       Int
 }
 
 model ProdutType {

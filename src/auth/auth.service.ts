@@ -27,9 +27,9 @@ export class AuthService {
     } else {
       if (info && Object.values(info).length > 0) {
         //account does not exist and user perform singup
-        console.log('about to create an account with : ', info);
         const { phoneNumber, role } = info;
-        const account = { ...user, phoneNumber, role };
+        const exp = info.role === 'seller' ? info.exp : null;
+        const account = { ...user, phoneNumber, role, exp };
         return this.registerUser(account);
       }
       //account does not exist and user perform login
@@ -37,11 +37,13 @@ export class AuthService {
     }
   }
   async registerUser(user): Promise<User> {
-    const { role } = user;
+    const { exp } = user;
     delete user.role;
+    delete user.exp;
     const userAccount = await this.userService.create(user);
-    if (role === 'seller') {
-      await this.sellerService.create(userAccount.id);
+    if (exp) {
+      const userId = userAccount.id;
+      await this.sellerService.create({ userId, exp });
     } else {
       await this.buyerService.create(userAccount.id);
     }

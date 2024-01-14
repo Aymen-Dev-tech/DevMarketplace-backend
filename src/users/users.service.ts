@@ -29,6 +29,7 @@ export class UsersService {
         Seller: {
           select: {
             id: true,
+            exp: true,
           },
         },
         Buyer: {
@@ -46,6 +47,12 @@ export class UsersService {
         id,
       },
       data,
+    });
+  }
+
+  async remove(id: number) {
+    return this.prisma.user.delete({
+      where: { id },
     });
   }
 }

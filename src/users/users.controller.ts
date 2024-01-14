@@ -1,13 +1,7 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from 'src/common/skip-auth.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -17,11 +11,15 @@ export class UsersController {
     const { userId } = req.user;
     return await this.userService.findOneById(userId);
   }
+  @Public()
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    return await this.userService.findOneById(id);
+  }
+  @Public()
   @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    updateUserDto: UpdateUserDto,
-  ) {
+  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    console.log('i recieved this data: ', updateUserDto);
     return await this.userService.update(id, updateUserDto);
   }
 }
