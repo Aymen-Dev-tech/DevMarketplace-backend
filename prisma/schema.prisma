@@ -38,7 +38,7 @@ model Product {
   id             Int              @id @default(autoincrement())
   name           String
   description    String
-  pric           Float
+  price           Float
   isSold         Boolean
   DamoURL        String?
   type           ProdutType       @relation(fields: [typeId], references: [id])

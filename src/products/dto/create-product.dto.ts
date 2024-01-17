@@ -1,0 +1,19 @@
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+
+export class CreateProductDto {
+  id: number;
+  isSold: boolean;
+  sellerId: number;
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  description: string;
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+  @IsOptional()
+  DamoURL: string;
+  @IsNotEmpty()
+  @IsNumber()
+  typeId: number;
+}
