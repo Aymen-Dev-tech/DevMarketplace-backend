@@ -45,10 +45,10 @@ export class AuthController {
       sub: result.id,
     });
     res.cookie('access_token', token, {
-      secure: false,
+      secure: true,
       sameSite: 'none',
-      httpOnly: false,
-      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
     });
     return res.redirect('http://localhost:5173/marketplace');
   }

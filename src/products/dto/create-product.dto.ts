@@ -16,4 +16,7 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumber()
   typeId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  techId: number;
 }

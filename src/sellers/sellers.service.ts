@@ -13,4 +13,9 @@ export class SellersService {
       data,
     });
   }
+  async findOneByUserId(userId: number) {
+    return this.prisma.seller.findUnique({
+      where: { userId },
+    });
+  }
 }
