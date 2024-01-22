@@ -85,6 +85,11 @@ export class ProductsController {
   getTech(@Query('type') type: string) {
     return this.productsService.getTech(type);
   }
+
+  @Get('search')
+  search(@Query('value') value: string) {
+    return this.productsService.search(value);
+  }
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.productsService.findOne(id);

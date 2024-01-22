@@ -95,6 +95,19 @@ export class ProductsService {
       data,
     });
   }
+  search(value: string) {
+    return this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: value,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
   // update(id: number, updateProductDto: UpdateProductDto) {
   //   return this.prisma;
   // }
