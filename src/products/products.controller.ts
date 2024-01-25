@@ -8,13 +8,17 @@ import {
   Query,
   UseInterceptors,
   UploadedFiles,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import * as path from 'path';
+import { join } from 'path';
 import { SellersService } from 'src/sellers/sellers.service';
+import type { Response } from 'express';
+import { createReadStream } from 'fs';
 @Controller('products')
 export class ProductsController {
   constructor(
@@ -52,7 +56,7 @@ export class ProductsController {
     //retrieve full paths
     const paths: string[] = [];
     files.forEach((file) => {
-      paths.push(path.resolve(file.path));
+      paths.push(file.filename);
     });
     // saving pictures paths
     const insert = paths.map(async (path) => {
@@ -90,11 +94,24 @@ export class ProductsController {
   search(@Query('value') value: string) {
     return this.productsService.search(value);
   }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.productsService.findOne(id);
   }
 
+  @Get('picture/:url')
+  downloadPicture(
+    @Param('url') url: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const file = createReadStream(join(process.cwd(), `uploads/${url}`));
+    res.set({
+      'Content-Type': 'application/json',
+      'Content-Disposition': `attachment; filename=${url}`,
+    });
+    return new StreamableFile(file);
+  }
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
   //   return this.productsService.update(+id, updateProductDto);

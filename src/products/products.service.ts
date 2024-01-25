@@ -21,6 +21,11 @@ export class ProductsService {
         name: true,
         price: true,
         isSold: true,
+        ProductPicture: {
+          select: {
+            url: true,
+          },
+        },
       },
     });
   }
