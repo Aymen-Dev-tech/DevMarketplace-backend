@@ -35,10 +35,10 @@ export class AuthController {
     req.session.destroy();
     if (result === 'redirect to login') {
       //redirects to login when an account already exist
-      return res.redirect('http://localhost:5173/login');
+      return res.redirect(`${process.env.CLIENT_URL}/login`);
     } else if (result === 'redirect to signup') {
       //redirects to signup when login with an account that does not exist
-      return res.redirect('http://localhost:5173/signup');
+      return res.redirect(`${process.env.CLIENT_URL}/signup`);
     }
     //return cookie
     const token = this.authService.generateJwt({
@@ -50,7 +50,7 @@ export class AuthController {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    return res.redirect('http://localhost:5173/marketplace');
+    return res.redirect(`${process.env.CLIENT_URL}/marketplace`);
   }
 
   @Get('logout')
