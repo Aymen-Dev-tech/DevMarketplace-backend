@@ -18,6 +18,9 @@ export class AppController {
   @Post('/webhook')
   webhook(@Body() checkout: any, @Req() req: Request, @Res() res: Response) {
     console.log('processing the payment');
+    console.log('checkout: ', checkout);
+    console.log('checkout data: ', checkout.data);
+
     res.setHeader('Content-Type', 'application/json');
     const signature = req.header('signature');
     if (!signature) {
@@ -36,7 +39,7 @@ export class AppController {
     }
     switch (checkout.type) {
       case 'checkout.paid':
-        console.log({ checkout: checkout.data });
+        console.log(checkout.data);
         // Handle the successful payment.
         break;
       case 'checkout.failed':
