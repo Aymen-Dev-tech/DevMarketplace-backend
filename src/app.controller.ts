@@ -2,16 +2,19 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import * as crypto from 'crypto';
+import { Public } from './common/skip-auth.decorator';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
+  @Public()
   @Post('/webhook')
   webhook(@Body() checkout: any, @Req() req: Request, @Res() res: Response) {
     const signature = req.header('signature');
