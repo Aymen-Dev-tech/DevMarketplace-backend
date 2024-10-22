@@ -22,9 +22,6 @@ export class AppController {
     @Res() res: Response,
   ) {
     console.log('processing the payment');
-    console.log('checkout: ', checkout);
-    console.log('checkout data: ', checkout.data);
-
     res.setHeader('Content-Type', 'application/json');
     const signature = req.header('signature');
     if (!signature) {
@@ -39,16 +36,19 @@ export class AppController {
 
     // If the calculated signature doesn't match the received signature, ignore the request
     if (computedSignature !== signature) {
+      console.log('signature does not match');
       return res.sendStatus(403);
     }
     switch (checkout.type) {
       case 'checkout.paid':
+        console.log('processing with checkout items retrieveing ');
         //retrieve the checkout id and use it to access all purchased items
         const options = {
           method: 'GET',
           headers: { Authorization: `Bearer ${process.env.SECRET_KEY}` },
         };
         try {
+          console.log('checkout ID', checkout.data.id);
           const response = await fetch(
             `https://pay.chargily.net/test/api/v2/checkouts/${checkout.data.id}/items`,
             options,
@@ -57,8 +57,11 @@ export class AppController {
             throw new Error('error while retrieveing checkout items');
           }
           const json = await response.json();
+          console.log('retrieve checkout items: ', json);
           console.log('checkout items: ', json.data);
-        } catch (error) {}
+        } catch (error) {
+          console.error(error.message);
+        }
 
         // Handle the successful payment.
         break;
