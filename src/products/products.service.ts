@@ -23,13 +23,34 @@ export class ProductsService {
         'https://pay.chargily.net/test/api/v2/products',
         options,
       );
+      if (!response.ok) {
+        throw new Error('Error when creating product in Chargliy pay');
+      }
       const responseData = await response.json();
-
-      console.log('Chargily pay response :', responseData.id);
+      const priceBody = {
+        amount: createProductDto.price,
+        currency: 'dzd',
+        product_id: responseData.id,
+      };
+      const priceOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.SECRET_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(priceBody),
+      };
+      const priceResponse = await fetch(
+        'https://pay.chargily.net/test/api/v2/prices',
+        priceOptions,
+      );
+      if (!priceResponse.ok) {
+        throw new Error('Error when creating price in Chargliy pay');
+      }
+      console.log('price respons:', await priceResponse.json());
 
       // Assign the fetched ID to the DTO
       createProductDto.ChargilyPayId = responseData.id;
-      console.log('payload: ', createProductDto);
 
       // Save the product to the database only after the ChargilyPayId is set
       return this.prisma.product.create({
@@ -37,7 +58,6 @@ export class ProductsService {
       });
     } catch (err) {
       console.error(err);
-      throw new Error('Failed to create product.');
     }
   }
 
