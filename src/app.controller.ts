@@ -28,14 +28,21 @@ export class AppController {
       console.log('no signature included');
       return res.sendStatus(400);
     }
-    // Calculate the signature
-    const computedSignature = crypto
-      .createHmac('sha256', process.env.SECRET_KEY)
-      .update(JSON.stringify(checkout))
-      .digest('hex');
+    console.log('Received signature:', signature);
+    const payload = JSON.stringify(checkout);
 
     // If the calculated signature doesn't match the received signature, ignore the request
-    if (computedSignature !== signature) {
+    const computedSignature = crypto
+      .createHmac('sha256', process.env.SECRET_KEY)
+      .update(payload) // Make sure this matches the original data sent by the webhook
+      .digest('hex');
+
+    console.log('Computed signature:', computedSignature);
+
+    const signatureBuffer = Buffer.from(signature, 'utf-8');
+    const computedSignatureBuffer = Buffer.from(computedSignature, 'utf-8');
+
+    if (!crypto.timingSafeEqual(signatureBuffer, computedSignatureBuffer)) {
       console.log('signature does not match');
       return res.sendStatus(403);
     }
