@@ -17,9 +17,12 @@ export class AppController {
   @Public()
   @Post('/webhook')
   webhook(@Body() checkout: any, @Req() req: Request, @Res() res: Response) {
+    console.log('processing the payment');
+    res.setHeader('Content-Type', 'application/json');
     const signature = req.header('signature');
     if (!signature) {
-      return res.status(400).send({ error: 'HTTP signature is required ' });
+      console.log('no signature included');
+      return res.sendStatus(400);
     }
     // Calculate the signature
     const computedSignature = crypto
