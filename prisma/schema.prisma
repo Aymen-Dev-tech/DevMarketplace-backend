@@ -39,9 +39,10 @@ model Product {
   name           String
   description    String
   price          Float
-  isSold         Boolean?          @default(false)
+  isSold         Boolean?         @default(false)
   DamoURL        String?
-  type           ProdutType?       @relation(fields: [typeId], references: [id])
+  ChargilyPayId  String?
+  type           ProdutType?      @relation(fields: [typeId], references: [id])
   typeId         Int
   ProductPicture ProductPicture[]
   Seller         Seller           @relation(fields: [sellerId], references: [id])

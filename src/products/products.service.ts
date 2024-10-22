@@ -6,10 +6,39 @@ import { UpdateProductDto } from './dto/update-product.dto';
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
-  create(createProductDto: CreateProductDto): Promise<Product> {
-    return this.prisma.product.create({
-      data: createProductDto,
-    });
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const body = { name: createProductDto.name };
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.SECRET_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    };
+
+    try {
+      // Await the fetch request to ChargilyPay
+      const response = await fetch(
+        'https://pay.chargily.net/test/api/v2/products',
+        options,
+      );
+      const responseData = await response.json();
+
+      console.log('Chargily pay response :', responseData.id);
+
+      // Assign the fetched ID to the DTO
+      createProductDto.ChargilyPayId = responseData.id;
+      console.log('payload: ', createProductDto);
+
+      // Save the product to the database only after the ChargilyPayId is set
+      return this.prisma.product.create({
+        data: createProductDto,
+      });
+    } catch (err) {
+      console.error(err);
+      throw new Error('Failed to create product.');
+    }
   }
 
   findAll(sellerId: number) {

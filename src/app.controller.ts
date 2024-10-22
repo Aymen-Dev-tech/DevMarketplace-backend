@@ -16,7 +16,11 @@ export class AppController {
 
   @Public()
   @Post('/webhook')
-  webhook(@Body() checkout: any, @Req() req: Request, @Res() res: Response) {
+  async webhook(
+    @Body() checkout: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
     console.log('processing the payment');
     console.log('checkout: ', checkout);
     console.log('checkout data: ', checkout.data);
@@ -39,7 +43,23 @@ export class AppController {
     }
     switch (checkout.type) {
       case 'checkout.paid':
-        console.log(checkout.data);
+        //retrieve the checkout id and use it to access all purchased items
+        const options = {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${process.env.SECRET_KEY}` },
+        };
+        try {
+          const response = await fetch(
+            `https://pay.chargily.net/test/api/v2/checkouts/${checkout.data.id}/items`,
+            options,
+          );
+          if (!response.ok) {
+            throw new Error('error while retrieveing checkout items');
+          }
+          const json = await response.json();
+          console.log('checkout items: ', json.data);
+        } catch (error) {}
+
         // Handle the successful payment.
         break;
       case 'checkout.failed':
