@@ -7,9 +7,9 @@ import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:5173', /\.vercel\.app$/, /\.netlify\.app$/],
+    origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type'],
     credentials: true,
   });
   app.useGlobalPipes(

@@ -57,6 +57,6 @@ export class AuthController {
   logout(@Res() res: Response) {
     console.log('logout called');
     res.clearCookie('access_token');
-    return res.end();
+    return res.status(200).end();
   }
 }
