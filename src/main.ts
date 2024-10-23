@@ -7,7 +7,10 @@ import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: '*',
+    origin: [
+      'https://dev-marketplace-frontend.vercel.app',
+      'http://localhost:5173',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
