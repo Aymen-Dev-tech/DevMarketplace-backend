@@ -22,4 +22,6 @@ export class CreateProductDto {
   techId: number;
   @IsOptional()
   ChargilyPayId: string;
+  @IsOptional()
+  ChargilyPayPriceId: string;
 }

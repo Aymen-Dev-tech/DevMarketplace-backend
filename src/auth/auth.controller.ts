@@ -27,6 +27,8 @@ export class AuthController {
   @UseGuards(GoogleGuard)
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const user = req.user;
+    console.log('the recived user from the response: ', user);
+
     //check if the req.user has been set by the passport
     if (!user) throw new UnauthorizedException('unauthenticated');
     const info = req.session?.info;
@@ -45,8 +47,8 @@ export class AuthController {
       sub: result.id,
     });
     res.cookie('access_token', token, {
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });

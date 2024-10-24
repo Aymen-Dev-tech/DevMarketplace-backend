@@ -47,10 +47,12 @@ export class ProductsService {
       if (!priceResponse.ok) {
         throw new Error('Error when creating price in Chargliy pay');
       }
-      console.log('price respons:', await priceResponse.json());
+      const priceJson = await priceResponse.json();
+      console.log('price respons:', priceJson);
 
       // Assign the fetched ID to the DTO
       createProductDto.ChargilyPayId = responseData.id;
+      createProductDto.ChargilyPayPriceId = priceJson.id;
 
       // Save the product to the database only after the ChargilyPayId is set
       return this.prisma.product.create({

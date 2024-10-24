@@ -11,9 +11,9 @@
 // }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -45,20 +45,21 @@ model Buyer {
 }
 
 model Product {
-  id             Int              @id @default(autoincrement())
-  name           String
-  description    String
-  price          Float
-  isSold         Boolean?         @default(false)
-  DamoURL        String?
-  ChargilyPayId  String?
-  type           ProdutType?      @relation(fields: [typeId], references: [id])
-  typeId         Int
-  ProductPicture ProductPicture[]
-  Seller         Seller           @relation(fields: [sellerId], references: [id])
-  sellerId       Int
-  tech           Tech             @relation(fields: [techId], references: [id])
-  techId         Int
+  id                 Int              @id @default(autoincrement())
+  name               String
+  description        String
+  price              Float
+  isSold             Boolean?         @default(false)
+  DamoURL            String?
+  ChargilyPayId      String?
+  ChargilyPayPriceId String?
+  type               ProdutType?      @relation(fields: [typeId], references: [id])
+  typeId             Int
+  ProductPicture     ProductPicture[]
+  Seller             Seller           @relation(fields: [sellerId], references: [id])
+  sellerId           Int
+  tech               Tech             @relation(fields: [techId], references: [id])
+  techId             Int
 }
 
 model ProdutType {

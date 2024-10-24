@@ -52,7 +52,10 @@ export class AppController {
         //retrieve the checkout id and use it to access all purchased items
         const options = {
           method: 'GET',
-          headers: { Authorization: `Bearer ${process.env.SECRET_KEY}` },
+          headers: {
+            Authorization: `Bearer ${process.env.SECRET_KEY}`,
+            'Content-Type': 'application/json',
+          },
         };
         try {
           console.log('checkout ID', checkout.data.id);
