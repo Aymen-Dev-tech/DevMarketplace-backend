@@ -3,10 +3,14 @@ import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import * as crypto from 'crypto';
 import { Public } from './common/skip-auth.decorator';
+import { PrismaService } from 'nestjs-prisma';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Public()
   @Get()
@@ -69,6 +73,13 @@ export class AppController {
           const json = await response.json();
           console.log('retrieve checkout items: ', json);
           console.log('checkout items: ', json.data);
+          //update the product availability
+          await this.prisma.product.update({
+            where: { ChargilyPayPriceId: json.data.id },
+            data: {
+              isSold: true,
+            },
+          });
         } catch (error) {
           console.error(error.message);
         }

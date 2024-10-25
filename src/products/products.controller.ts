@@ -49,7 +49,7 @@ export class ProductsController {
   async create(
     @Body() createProductDto: CreateProductDto,
     @Req() req,
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFiles() files?: Array<Express.Multer.File>,
   ) {
     //create the product
     const { userId } = req.user;
@@ -57,18 +57,21 @@ export class ProductsController {
     createProductDto.sellerId = id;
     const product = await this.productsService.create(createProductDto);
     //retrieve full paths
-    const paths: string[] = [];
-    files.forEach((file) => {
-      paths.push(file.filename);
-    });
-    // saving pictures paths
-    const insert = paths.map(async (path) => {
-      await this.productsService.createProductPictures({
-        url: path,
-        productId: product.id,
+    if (files && files.length > 0) {
+      // If files are provided, process them
+      const paths: string[] = files.map((file) => file.filename);
+
+      // Save picture paths
+      const insert = paths.map(async (path) => {
+        await this.productsService.createProductPictures({
+          url: path,
+          productId: product.id,
+        });
       });
-    });
-    Promise.all(insert);
+
+      await Promise.all(insert); // Ensure all picture paths are saved before continuing
+    }
+
     return product;
   }
 

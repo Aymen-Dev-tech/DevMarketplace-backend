@@ -48,6 +48,7 @@ export class AuthController {
     });
     res.cookie('access_token', token, {
       secure: process.env.NODE_ENV === 'production',
+      // secure: true,
       sameSite: 'none',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,

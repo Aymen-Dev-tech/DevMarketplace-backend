@@ -51,8 +51,8 @@ model Product {
   price              Float
   isSold             Boolean?         @default(false)
   DamoURL            String?
-  ChargilyPayId      String?
-  ChargilyPayPriceId String?
+  ChargilyPayId      String           @unique
+  ChargilyPayPriceId String           @unique
   type               ProdutType?      @relation(fields: [typeId], references: [id])
   typeId             Int
   ProductPicture     ProductPicture[]
