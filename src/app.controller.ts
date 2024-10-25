@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
-import * as crypto from 'crypto';
+// import * as crypto from 'crypto';
 import { Public } from './common/skip-auth.decorator';
-import { PrismaService } from 'nestjs-prisma';
+import { PrismaService } from 'src/prisma/prisma.service';
+
 
 @Controller()
 export class AppController {
