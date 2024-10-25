@@ -76,7 +76,7 @@ export class AppController {
           console.log('checkout items: ', json.data);
           //update the product availability
           await this.prisma.product.update({
-            where: { ChargilyPayPriceId: json.data.id },
+            where: { ChargilyPayPriceId: json.data.at(0).id },
             data: {
               isSold: true,
             },
